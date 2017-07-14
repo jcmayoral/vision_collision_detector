@@ -1,6 +1,6 @@
 
 cmake_minimum_required(VERSION 2.8.3)
-project(trajectory_generator)
+project(vision_utils_ros)
 
 find_package(catkin REQUIRED
     COMPONENTS
@@ -9,15 +9,7 @@ find_package(catkin REQUIRED
 )
 
 find_package(cmake_modules REQUIRED)
-
-
-include_directories(
-  include
-  ${catkin_INCLUDE_DIRS}
-  ${Eigen_INCLUDE_DIRS}
-)
-
-add_definitions(${EIGEN_DEFINITIONS})
+find_package(OpenCV REQUIRED)
 
 set(CMAKE_CXX_FLAGS "-std=c++11")
 
@@ -29,15 +21,21 @@ catkin_package(
     roscpp
 )
 
-add_library(${PROJECT_NAME}
-  src/vision_utils_ros_node.cpp
+include_directories(
+  include
+  ${catkin_INCLUDE_DIRS}
+  ${OpenCV_INCLUDE_DIRS}
 )
+
+add_executable(vision_utils_ros src/vision_utils_ros_node.cpp)
 
 target_link_libraries(${PROJECT_NAME}
   ${catkin_LIBRARIES}
+  ${OpenCV_LIBS}
+  vision_utils
 )
 
-install(TARGETS ${PROJECT_NAME} ${PROJECT_NAME}
+install(TARGETS ${PROJECT_NAME}
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})

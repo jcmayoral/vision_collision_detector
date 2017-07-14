@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <package>
-  <name>trajectory_generator</name>
-  <version>0.0.3</version>
+  <name>vision_utils_ros</name>
+  <version>0.0.1</version>
   <description>
-    The trajectory_generator package implements a plugin
+    The vision_utils ROS wrapper package
   </description>
 
   <maintainer email="jose.mayoral@smail.inf.h-brs.de">Jose Mayoral</maintainer>
@@ -15,53 +15,16 @@
   <author email="jose.mayoral@smail.inf.h-brs.de">Jose Mayoral</author>
 
   <buildtool_depend>catkin</buildtool_depend>
-  <build_depend>footprint_checker</build_depend>
-  <build_depend>footprint_accelerated_checker</build_depend>
-  <build_depend>base_local_planner</build_depend>
-  <build_depend>costmap_2d</build_depend>
-  <build_depend>costmap_converter</build_depend>
-  <build_depend>dynamic_reconfigure</build_depend>
   <build_depend>geometry_msgs</build_depend>
-  <build_depend>nav_core</build_depend>
-  <build_depend>nav_msgs</build_depend>
-  <build_depend>pluginlib</build_depend>
   <build_depend>roscpp</build_depend>
-  <build_depend>std_msgs</build_depend>
-  <build_depend>tf</build_depend>
-  <build_depend>robot_model</build_depend>
-  <build_depend>mytrajectory_msgs</build_depend>
-<!--
-  <build_depend>sbpl</build_depend>
--->
+  <build_depend>vision_utils</build_depend>
   <build_depend>cmake_modules</build_depend>
     
-  <run_depend>footprint_checker</run_depend>
-  <run_depend>footprint_accelerated_checker</run_depend>
-  <run_depend>base_local_planner</run_depend>
-  <run_depend>costmap_2d</run_depend>
-  <run_depend>costmap_converter</run_depend>
-  <run_depend>dynamic_reconfigure</run_depend>
   <run_depend>geometry_msgs</run_depend>
-  <run_depend>nav_core</run_depend>
-  <run_depend>nav_msgs</run_depend>
-  <run_depend>pluginlib</run_depend>
   <run_depend>roscpp</run_depend>
-  <run_depend>std_msgs</run_depend>
-  <run_depend>tf</run_depend>
-  <run_depend>robot_model</run_depend>
-  <run_depend>mytrajectory_msgs</run_depend>
-  <!--
-  <run_depend>sbpl</run_depend>
--->
-
-  <run_depend>amcl</run_depend>
-  <run_depend>fake_localization</run_depend>
-  <run_depend>gmapping</run_depend>
-  <run_depend>map_server</run_depend>
-  <run_depend>move_base</run_depend>
   <run_depend>cmake_modules</run_depend>
-    
+  <run_depend>vision_utils</run_depend>
+  
   <export>
-    <nav_core plugin="${prefix}/plugins.xml"/>
   </export>
 </package>
