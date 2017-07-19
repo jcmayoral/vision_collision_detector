@@ -36,7 +36,7 @@ class ROSFaultDetection:public FaultDetection{
 		void startDetection(){
 		  start();
 		  while(ros::ok()){
-				mtx_.lock(); // not proceed until new frame is received
+                    mtx_.lock(); // not proceed until new frame is received
 		    run();
 		  }
 
