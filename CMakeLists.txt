@@ -5,6 +5,7 @@ project(vision_utils_ros)
 find_package(catkin REQUIRED
     COMPONENTS
     geometry_msgs
+    cv_bridge
     roscpp
 )
 
@@ -18,6 +19,7 @@ catkin_package(
   LIBRARIES ${PROJECT_NAME}
   CATKIN_DEPENDS
     geometry_msgs
+    cv_bridge
     roscpp
 )
 
