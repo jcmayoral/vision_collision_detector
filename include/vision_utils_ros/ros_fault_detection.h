@@ -1,3 +1,4 @@
+#include <ros/ros.h>
 #include <featuredetection/FD.h>
 using namespace cv;
 using namespace std;
@@ -18,18 +19,21 @@ bool FaultDetection::run(){
   return true;
 }
 
+bool FaultDetection::stop(){
+  return true;
+}
+
 bool FaultDetection::start(){
   cout << "my new start" << endl;
 }
 
 class ROSFaultDetection:public FaultDetection{
 	public:
-		ROSFaultDetection(){
-			FaultDetection(true);
+		ROSFaultDetection(ros::NodeHandle nh) : FaultDetection(true){
 		}
 		void startDetection(){
 		  start();
-		  while(true){
+		  while(ros::ok()){
 		    run();
 		  }
 		  stop();
