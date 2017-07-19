@@ -1,13 +1,6 @@
-#include <stdio.h>
-#include <featuredetection/FD.h>
-
-using namespace std;
+#include <vision_utils_ros/ros_fault_detection.h>
 
 int main(int argc, char *argv[]){
-    FaultDetection fd;
-    fd.start();
-    fd.run();
-    fd.stop();
-    std::cout << "inside" <<std::endl;
-    return 0;
+    ROSFaultDetection fd_;
+    fd_.startDetection();
 }
