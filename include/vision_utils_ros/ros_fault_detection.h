@@ -37,6 +37,7 @@ class ROSFaultDetection:public FaultDetection{
 		  start();
 		  while(ros::ok()){
                     mtx_.lock(); // not proceed until new frame is received
+                    ROS_INFO("Not supposed to be seen");
 		    run();
 		  }
 
