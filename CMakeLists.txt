@@ -10,7 +10,7 @@ find_package(catkin REQUIRED
 )
 
 find_package(cmake_modules REQUIRED)
-find_package(OpenCV REQUIRED)
+find_package(OpenCV 3.3.0 REQUIRED)
 
 set(CMAKE_CXX_FLAGS "-std=c++11")
 

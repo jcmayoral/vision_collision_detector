@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <launch>
-
-  <node pkg="vision_utils_ros" type="vision_utils_ros" respawn="true" name="collision_detection" output="screen">
+  <remap from="/camera" to="/camera/rgb/image_color"/>
+  <node pkg="vision_utils_ros" type="vision_utils_ros" respawn="false" name="collision_detection" output="screen">
   </node>
 
 </launch>
