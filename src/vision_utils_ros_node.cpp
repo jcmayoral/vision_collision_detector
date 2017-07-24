@@ -4,5 +4,4 @@ int main(int argc, char *argv[]){
     ros::init(argc, argv, "vision_fault_detection");
     ros::NodeHandle nh("~");
     ROSFaultDetection fd_(nh);
-    fd_.startDetection();
 }

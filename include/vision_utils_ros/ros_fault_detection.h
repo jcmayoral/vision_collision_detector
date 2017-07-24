@@ -22,12 +22,14 @@ bool FaultDetection::stop(){
 }
 
 bool FaultDetection::start(){
-  cout << "my new start" << endl;
+	return true;
 }
 
 class ROSFaultDetection:public FaultDetection{
 	public:
-		ROSFaultDetection(ros::NodeHandle nh) : FaultDetection(true){
+		ROSFaultDetection(ros::NodeHandle nh) : FaultDetection(true), is_First_Image_received(false){
+			image_sub_ = nh.subscribe("/camera", 1, &ROSFaultDetection::imageCb,this);
+			ros::spin();
 		}
 
 		Mat setFrame(){
@@ -35,12 +37,7 @@ class ROSFaultDetection:public FaultDetection{
 		}
 		void startDetection(){
 		  start();
-		  while(ros::ok()){
-                    mtx_.lock(); // not proceed until new frame is received
-                    ROS_INFO("Not supposed to be seen");
-		    run();
-		  }
-
+			run();
 		  stop();
 		}
 
@@ -55,11 +52,15 @@ class ROSFaultDetection:public FaultDetection{
 				return;
 		  }
 			first_.setFrame(cv_ptr->image);
-			mtx_.unlock();
-			//frame_ = cv_ptr->image;
+			is_First_Image_received = true;
+
+			if (is_First_Image_received){
+				startDetection();
+			}
 	 }
 	private:
-		std::mutex mtx_;
+		bool is_First_Image_received;
+		ros::Subscriber image_sub_;
 };
 
 #endif /* ROSFAULTDETECTION_H_ */
