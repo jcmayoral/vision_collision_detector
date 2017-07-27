@@ -34,17 +34,10 @@ Mat MyFrameContainer::getDescriptors(){
   return descriptors_;
 }
 
-/*
-std::vector<cv::KeyPoint> FrameContainer::getKeyPoints(){
+std::vector<cv::KeyPoint> MyFrameContainer::getKeyPoints(){
   return keypoints_;
 }
 
-void FrameContainer::setKeyPoints(std::vector<cv::KeyPoint> kp){
+void MyFrameContainer::setKeyPoints(std::vector<cv::KeyPoint> kp){
   keypoints_ = kp;
 }
-void FrameContainer::read(VideoCapture v){
-    v  >> frame_;
-    //cv::cvtColor(frame_,frame_,cv::COLOR_BGR2GRAY);
-}
-
-*/

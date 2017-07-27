@@ -14,6 +14,8 @@
 using namespace cv;
 */
 #include "opencv2/highgui/highgui.hpp"
+#include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/features2d/features2d.hpp>
 
 using namespace cv;
 
@@ -29,6 +31,8 @@ class MyFrameContainer{
 		Mat getFrame();
 		void setDescriptors(Mat desc);
 		Mat getDescriptors();
+		std::vector<cv::KeyPoint> getKeyPoints();
+		void setKeyPoints(std::vector<cv::KeyPoint> kp);
 
 	private:
 		Mat frame_;

@@ -35,7 +35,7 @@ add_executable(vision_utils_ros
 
 target_link_libraries(${PROJECT_NAME}
   ${catkin_LIBRARIES}
-  ${OpenCV_LIBS})
+  ${OpenCV_LIBRARIES})
 
 install(TARGETS ${PROJECT_NAME}
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
