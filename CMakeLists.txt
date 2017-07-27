@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(vision_utils_ros)
 
+add_compile_options(-std=c++11)
+
 find_package(catkin REQUIRED
     COMPONENTS
     geometry_msgs
@@ -9,7 +11,7 @@ find_package(catkin REQUIRED
 )
 
 find_package(cmake_modules REQUIRED)
-find_package(OpenCV 3.2.0 REQUIRED)
+find_package(OpenCV 2.4.8 EXACT REQUIRED)
 
 include_directories(
   include
@@ -28,11 +30,8 @@ catkin_package(
 
 add_executable(vision_utils_ros
                src/vision_utils_ros_node.cpp
-               src/FD.cpp
-               src/Matcher.cpp
-               src/tracker.cpp
-               src/myfeaturedetection.cpp
-               src/statics_tools.cpp)
+               src/frame_container.cpp
+        )
 
 target_link_libraries(${PROJECT_NAME}
   ${catkin_LIBRARIES}

@@ -1,37 +1,40 @@
 /*
- * myfeaturedetection.h
+ * framecontainer.h
  *
  *  Created on: Nov 24, 2016
  *      Author: jose
  */
 
+/*
 #include "opencv2/opencv.hpp"
 #include "opencv2/core/core.hpp"
 #include "opencv2/highgui/highgui.hpp"
 #include "opencv2/features2d.hpp"
-#include "opencv2/xfeatures2d.hpp"
+#include "opencv2/opencv.hpp"
+using namespace cv;
+*/
+#include "opencv2/highgui/highgui.hpp"
 
 using namespace cv;
-using namespace cv::xfeatures2d;
+
+#ifndef FRAMECONTAINER_H_
+#define FRAMECONTAINER_H_
 
 class MyFrameContainer{
 	public:
-		void setFrame(Mat new_frame);
-		Mat getFrame();
-		void show(std::string window_name);
-		void read(VideoCapture v);
-		void setDescriptors(Mat desc);
-		Mat getDescriptors();
-		std::vector<cv::KeyPoint> getKeyPoints();
-		void setKeyPoints(std::vector<cv::KeyPoint> kp);
-
 		MyFrameContainer();
     MyFrameContainer(const MyFrameContainer& other);
-    ~MyFrameContainer();
+		~MyFrameContainer();
+		void setFrame(Mat new_frame);
+		Mat getFrame();
+		void setDescriptors(Mat desc);
+		Mat getDescriptors();
 
-	protected:
+	private:
 		Mat frame_;
 		Mat descriptors_;
 		std::vector<cv::KeyPoint> keypoints_;
 
 };
+
+#endif /* FRAMECONTAINER_H_ */
