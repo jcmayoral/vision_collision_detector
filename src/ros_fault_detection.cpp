@@ -1,9 +1,10 @@
 #include "vision_utils_ros/ros_fault_detection.h"
 
-ROSFaultDetection::ROSFaultDetection(ros::NodeHandle nh, int hessian) : current_(), last_(), is_First_Image_received(false),detector_(hessian){
+ROSFaultDetection::ROSFaultDetection(ros::NodeHandle nh, int hessian) : current_(), last_(), cusum_(0.0), is_First_Image_received(false),detector_(hessian){
   ROS_INFO("ROSFaultDetection Constructor");
   image_sub_ = nh.subscribe("/camera", 1, &ROSFaultDetection::imageCb,this);
   image_pub_ = nh.advertise<sensor_msgs::Image>("Image", 1);
+  cusum_pub_ = nh.advertise<std_msgs::Float64>("cusum_surf_distance", 1);
   ros::spin();
 }
 
@@ -51,14 +52,17 @@ void ROSFaultDetection::run(){
    matcher_.getBestMatches(current_,last_);
    matcher_.separateBestMatches(current_,last_);
    matcher_.drawBestMatches(current_,last_);
-   publishOutputImage();
+   cusum_ = statics_tool->CUSUM(matcher_);
+   publishOutputs();
 }
 
-void ROSFaultDetection::publishOutputImage(){
+void ROSFaultDetection::publishOutputs(){
+
+ // Publishing image after matching
  Mat img = matcher_.getFrame();
- sensor_msgs::Image out_msg; // >> message to be sent
+ sensor_msgs::Image out_msg;
  cv_bridge::CvImage img_bridge;
- std_msgs::Header header; // empty header
+ std_msgs::Header header;
 
  try{
    img_bridge = cv_bridge::CvImage(header, sensor_msgs::image_encodings::RGB8, img);
@@ -70,6 +74,11 @@ void ROSFaultDetection::publishOutputImage(){
    ROS_ERROR("cv_bridge exception: %s", e.what());
    return;
  }
+
+ //CUSUM Plot
+ std_msgs::Float64 out_msg_2;
+ out_msg_2.data = cusum_;
+ cusum_pub_.publish(out_msg_2);
 }
 
 void ROSFaultDetection::runFeatureExtractor(){

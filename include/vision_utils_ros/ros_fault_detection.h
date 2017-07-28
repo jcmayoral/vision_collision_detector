@@ -2,6 +2,7 @@
 #include <ros/ros.h>
 #include <cv_bridge/cv_bridge.h>
 #include <sensor_msgs/image_encodings.h>
+#include <std_msgs/Float64.h>
 //OpenCV
 #include "opencv2/core/core.hpp"
 #include "opencv2/features2d/features2d.hpp"
@@ -26,18 +27,28 @@ class ROSFaultDetection{
 		~ROSFaultDetection();
 		void imageCb(const sensor_msgs::ImageConstPtr& msg);
 		void run();
-		void publishOutputImage();
+		void publishOutputs();
 		void runFeatureExtractor();
 
 	private:
+		//Contains information from a given frame
 		MyFrameContainer current_;
 		MyFrameContainer last_;
+		//SURF Extraction
 		SurfFeatureDetector detector_;
 		SurfDescriptorExtractor extractor_;
 		ROSMatcher matcher_;
+
+		//Flags
 		bool is_First_Image_received;
+
+		//Publishers and Subscriber
 		ros::Subscriber image_sub_;
 		ros::Publisher image_pub_;
+		ros::Publisher cusum_pub_;
+
+		//CUUSM
+		double cusum_;
 		std::shared_ptr<ROSStatics> statics_tool;
 };
 
