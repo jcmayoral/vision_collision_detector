@@ -48,8 +48,7 @@ void ROSMatcher::getBestMatches(MyFrameContainer ext1, MyFrameContainer ext2){
     Mat descriptors = ext1.getDescriptors();
 
     for( int i = 0; i < descriptors.rows; i++ ){
-      std::cout << "size of k1 " << k1[i].size << ", size of k2 " << k2[i].size << std::endl;
-      if ((k2[i].size > k1[i].size)&& (matches_[i].distance<0.01)){
+      if ((k2[i].size > k1[i].size)&& (matches_[i].distance<0.10)){
         best_matches_.push_back( matches_[i]);
 		}
 	}

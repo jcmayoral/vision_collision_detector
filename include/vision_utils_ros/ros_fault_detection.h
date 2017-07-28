@@ -50,15 +50,17 @@ class ROSFaultDetection{
 
 			if (!current_.getFrame().empty()){
 				runFeatureExtractor();
-				last_ = current_;
 			}
 
 			if (!is_First_Image_received){
 				is_First_Image_received = true;
 				ROS_INFO("First Frame Received");
+				last_ = current_;
+
 			}
 			else{
 				run();
+				last_ = current_;
 			}
 	 }
 
