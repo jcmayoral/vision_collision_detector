@@ -19,6 +19,7 @@ MyFrameContainer::MyFrameContainer(const MyFrameContainer& other): descriptors_(
 }
 
 void MyFrameContainer::setFrame(Mat new_frame){
+  frame_.release();
   frame_ = new_frame;
 }
 

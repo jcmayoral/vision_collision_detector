@@ -31,6 +31,7 @@ catkin_package(
 add_executable(vision_utils_ros
                src/vision_utils_ros_node.cpp
                src/frame_container.cpp
+               src/ros_matcher.cpp
         )
 
 target_link_libraries(${PROJECT_NAME}
