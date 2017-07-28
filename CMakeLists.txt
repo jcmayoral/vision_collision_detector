@@ -32,7 +32,9 @@ add_executable(vision_utils_ros
                src/vision_utils_ros_node.cpp
                src/frame_container.cpp
                src/ros_matcher.cpp
-        )
+               src/ros_fault_detection.cpp
+               src/ros_statics_tools.cpp
+)
 
 target_link_libraries(${PROJECT_NAME}
   ${catkin_LIBRARIES}
