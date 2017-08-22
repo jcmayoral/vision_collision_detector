@@ -1,6 +1,6 @@
 #include "vision_utils_ros/ros_fault_detection.h"
 
-ROSFaultDetection::ROSFaultDetection(ros::NodeHandle nh, int hessian) : current_(), last_(), cusum_(0.0), is_First_Image_received(false),detector_(hessian){
+ROSFaultDetection::ROSFaultDetection(ros::NodeHandle nh, int hessian) : current_(), last_(), cusum_(0.0), last_cusum_(0.0), is_First_Image_received(false),detector_(hessian){
   ROS_INFO("ROSFaultDetection Constructor");
   image_sub_ = nh.subscribe("/cam3d/rgb/image_raw", 1, &ROSFaultDetection::imageCb,this);
   image_pub_ = nh.advertise<sensor_msgs::Image>("Image", 1);
@@ -54,6 +54,7 @@ void ROSFaultDetection::run(){
    matcher_.getBestMatches(current_,last_);
    matcher_.separateBestMatches(current_,last_);
    matcher_.drawBestMatches(current_,last_);
+   last_cusum_ = cusum_;
    cusum_ = statics_tool->CUSUM(matcher_);
    publishOutputs();
 }
@@ -79,12 +80,13 @@ void ROSFaultDetection::publishOutputs(){
 
  //CUSUM Plot
  std_msgs::Float64 out_msg_2;
- out_msg_2.data = cusum_;
+ out_msg_2.data = cusum_-last_cusum_;
  cusum_pub_.publish(out_msg_2);
 
  //sensorFusionMsg
- std_msgs::Float32 msg;
- //msg.data = cusum_;
+ output_msg_.data.clear();
+ output_msg_.data.push_back(cusum_);
+ output_msg_.msg = fusion_msgs::sensorFusionMsg::OK;
  output_msg_pub_.publish(output_msg_);
 }
 
