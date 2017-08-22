@@ -2,9 +2,11 @@
 
 ROSFaultDetection::ROSFaultDetection(ros::NodeHandle nh, int hessian) : current_(), last_(), cusum_(0.0), is_First_Image_received(false),detector_(hessian){
   ROS_INFO("ROSFaultDetection Constructor");
-  image_sub_ = nh.subscribe("/camera", 1, &ROSFaultDetection::imageCb,this);
+  image_sub_ = nh.subscribe("/cam3d/rgb/image_raw", 1, &ROSFaultDetection::imageCb,this);
   image_pub_ = nh.advertise<sensor_msgs::Image>("Image", 1);
   cusum_pub_ = nh.advertise<std_msgs::Float64>("cusum_surf_distance", 1);
+  ros::NodeHandle nh2("~");
+  output_msg_pub_ = nh2.advertise<fusion_msgs::sensorFusionMsg>("/collisions_2", 1);
   ros::spin();
 }
 
@@ -19,7 +21,7 @@ void ROSFaultDetection::imageCb(const sensor_msgs::ImageConstPtr& msg){
   try
    {
     //cv_ptr = cv_bridge::toCvCopy(msg, sensor_msgs::image_encodings::RGB8);
-    input_frame = cv_bridge::toCvCopy(msg, "bgr8")->image;
+    input_frame = cv_bridge::toCvCopy(msg, sensor_msgs::image_encodings::MONO8)->image;
     current_.setFrame(input_frame);
 
    }
@@ -31,8 +33,8 @@ void ROSFaultDetection::imageCb(const sensor_msgs::ImageConstPtr& msg){
 
   if (!current_.getFrame().empty()){
     runFeatureExtractor();
-  }
 
+  }
   if (!is_First_Image_received){
     is_First_Image_received = true;
     ROS_INFO("First Frame Received");
@@ -79,6 +81,11 @@ void ROSFaultDetection::publishOutputs(){
  std_msgs::Float64 out_msg_2;
  out_msg_2.data = cusum_;
  cusum_pub_.publish(out_msg_2);
+
+ //sensorFusionMsg
+ std_msgs::Float32 msg;
+ //msg.data = cusum_;
+ output_msg_pub_.publish(output_msg_);
 }
 
 void ROSFaultDetection::runFeatureExtractor(){

@@ -15,7 +15,7 @@ MyFrameContainer::~MyFrameContainer(){
 
 MyFrameContainer::MyFrameContainer(const MyFrameContainer& other): descriptors_(other.descriptors_),
                                             keypoints_(other.keypoints_), frame_(other.frame_){
-    //cv::cvtColor(frame_,frame_,cv::COLOR_RGB2GRAY);
+    cv::cvtColor(frame_,frame_,cv::COLOR_RGB2GRAY);
 }
 
 void MyFrameContainer::setFrame(Mat new_frame){

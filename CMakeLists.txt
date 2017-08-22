@@ -7,6 +7,7 @@ find_package(catkin REQUIRED
     COMPONENTS
     geometry_msgs
     cv_bridge
+    fusion_msgs
     roscpp
 )
 

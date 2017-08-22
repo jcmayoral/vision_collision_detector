@@ -3,6 +3,8 @@
 #include <cv_bridge/cv_bridge.h>
 #include <sensor_msgs/image_encodings.h>
 #include <std_msgs/Float64.h>
+#include <std_msgs/Float32.h>
+
 //OpenCV
 #include "opencv2/core/core.hpp"
 #include "opencv2/features2d/features2d.hpp"
@@ -13,6 +15,8 @@
 //vision_utils_ros
 #include <vision_utils_ros/frame_container.h>
 #include <vision_utils_ros/ros_matcher.h>
+
+#include <fusion_msgs/sensorFusionMsg.h>
 
 using namespace cv;
 using namespace std;
@@ -46,10 +50,14 @@ class ROSFaultDetection{
 		ros::Subscriber image_sub_;
 		ros::Publisher image_pub_;
 		ros::Publisher cusum_pub_;
+		ros::Publisher output_msg_pub_;
 
 		//CUUSM
 		double cusum_;
 		std::shared_ptr<ROSStatics> statics_tool;
+
+		//Output
+		fusion_msgs::sensorFusionMsg output_msg_;
 };
 
 #endif /* ROSFAULTDETECTION_H_ */
