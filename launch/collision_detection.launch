@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <launch>
-  <remap from="/camera" to="/camera/rgb/image_color"/>
   <node pkg="vision_utils_ros" type="vision_utils_ros" respawn="false" name="vision_utils_ros" output="screen">
+  <remap from="~/camera" to="/cam3d/rgb/image_raw"/>
   </node>
 </launch>

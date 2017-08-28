@@ -2,7 +2,8 @@
 
 ROSFaultDetection::ROSFaultDetection(ros::NodeHandle nh, int hessian) : current_(), last_(), cusum_(0.0), last_cusum_(0.0), is_First_Image_received(false),detector_(hessian){
   ROS_INFO("ROSFaultDetection Constructor");
-  image_sub_ = nh.subscribe("/cam3d/rgb/image_raw", 1, &ROSFaultDetection::imageCb,this);
+  image_sub_ = nh.subscribe("camera", 1, &ROSFaultDetection::imageCb,this);
+  ROS_INFO_STREAM("Camera topic " << image_sub_.getTopic());
   image_pub_ = nh.advertise<sensor_msgs::Image>("Image", 1);
   cusum_pub_ = nh.advertise<std_msgs::Float64>("cusum_surf_distance", 1);
   ros::NodeHandle nh2("~");

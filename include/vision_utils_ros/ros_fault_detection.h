@@ -59,6 +59,8 @@ class ROSFaultDetection{
 
 		//Output
 		fusion_msgs::sensorFusionMsg output_msg_;
+		
+		std::string topic_name;
 };
 
 #endif /* ROSFAULTDETECTION_H_ */
