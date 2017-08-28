@@ -1,6 +1,6 @@
 #include "vision_utils_ros/ros_fault_detection.h"
 
-ROSFaultDetection::ROSFaultDetection(ros::NodeHandle nh, int hessian) : current_(), last_(), cusum_(0.0), last_cusum_(0.0), is_First_Image_received(false),detector_(hessian){
+ROSFaultDetection::ROSFaultDetection(ros::NodeHandle nh, int hessian) : current_(), last_(), cusum_(0.0), last_cusum_(0.0), is_First_Image_received(false),detector_(hessian),sensor_id_("NO_ID"), frame_id_("empty"){
   ROS_INFO("ROSFaultDetection Constructor");
   image_sub_ = nh.subscribe("camera", 1, &ROSFaultDetection::imageCb,this);
   ROS_INFO_STREAM("Camera topic " << image_sub_.getTopic());
@@ -8,6 +8,7 @@ ROSFaultDetection::ROSFaultDetection(ros::NodeHandle nh, int hessian) : current_
   cusum_pub_ = nh.advertise<std_msgs::Float64>("cusum_surf_distance", 1);
   ros::NodeHandle nh2("~");
   output_msg_pub_ = nh2.advertise<fusion_msgs::sensorFusionMsg>("/collisions_2", 1);
+  nh.getParam("sensor_id", sensor_id_);
   ros::spin();
 }
 
@@ -37,7 +38,9 @@ void ROSFaultDetection::imageCb(const sensor_msgs::ImageConstPtr& msg){
 
   }
   if (!is_First_Image_received){
-    is_First_Image_received = true;
+    is_First_Image_received = true;  
+    std_msgs::Header h = msg->header;
+    frame_id_ = h.frame_id;
     ROS_INFO("First Frame Received");
     last_ = current_;
 
@@ -85,8 +88,12 @@ void ROSFaultDetection::publishOutputs(){
  cusum_pub_.publish(out_msg_2);
 
  //sensorFusionMsg
+ output_msg_.header.stamp = ros::Time::now();
+ output_msg_.header.frame_id = frame_id_;
+ output_msg_.sensor_id.data = sensor_id_.c_str();
  output_msg_.data.clear();
  output_msg_.data.push_back(cusum_);
+ output_msg_.window_size = 1;
  output_msg_.msg = fusion_msgs::sensorFusionMsg::OK;
  output_msg_pub_.publish(output_msg_);
 }
