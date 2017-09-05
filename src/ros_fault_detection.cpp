@@ -10,11 +10,11 @@ ROSFaultDetection::ROSFaultDetection(ros::NodeHandle nh, int hessian) : current_
   output_msg_pub_ = nh2.advertise<fusion_msgs::sensorFusionMsg>("/collisions_2", 1);
   nh.getParam("sensor_id", sensor_id_);
   ros::spin();
-}
+};
 
 ROSFaultDetection::~ROSFaultDetection(){
 
-}
+};
 
 void ROSFaultDetection::imageCb(const sensor_msgs::ImageConstPtr& msg){
   cv_bridge::CvImagePtr cv_ptr;
@@ -49,7 +49,7 @@ void ROSFaultDetection::imageCb(const sensor_msgs::ImageConstPtr& msg){
     run();
     last_ = current_;
   }
-}
+};
 
 void ROSFaultDetection::run(){
    matcher_.clearing();
@@ -61,7 +61,7 @@ void ROSFaultDetection::run(){
    last_cusum_ = cusum_;
    cusum_ = statics_tool->CUSUM(matcher_);
    publishOutputs();
-}
+};
 
 void ROSFaultDetection::publishOutputs(){
 
@@ -96,7 +96,7 @@ void ROSFaultDetection::publishOutputs(){
  output_msg_.window_size = 1;
  output_msg_.msg = fusion_msgs::sensorFusionMsg::OK;
  output_msg_pub_.publish(output_msg_);
-}
+};
 
 void ROSFaultDetection::runFeatureExtractor(){
 
@@ -119,4 +119,4 @@ void ROSFaultDetection::runFeatureExtractor(){
    current_.setKeyPoints(k1);
  }
 
-}
+};
