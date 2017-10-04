@@ -106,10 +106,11 @@ double ROSStatics::CUSUM(ROSMatcher input){
 
     double cusum_mean, cusum_var = 0.0;
     std::vector<DMatch> v = input.getBestMatches();
+    double max_value = input.getMatchPercentage();
 
     if (input.getSize(4)>1){
       for (unsigned int i=0; i<input.getSize(4);i++){
-        cusum_mean += v[i].distance;
+        cusum_mean += v[i].distance/max_value;
       }
 
       cusum_mean = cusum_mean/input.getSize(4);

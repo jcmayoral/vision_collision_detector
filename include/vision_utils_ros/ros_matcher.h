@@ -10,10 +10,11 @@ using namespace cv;
 class ROSMatcher:FlannBasedMatcher{
 
 	public:
-		ROSMatcher();
+		ROSMatcher(double threshold = 0.10);
 		~ROSMatcher();
 		void show(std::string window_name);
 		void setMatchPercentage(double val);
+		double getMatchPercentage();
 		void getBestMatches(MyFrameContainer ext1, MyFrameContainer ext2);
 		void setFrame(Mat new_frame);
 		Mat getFrame();

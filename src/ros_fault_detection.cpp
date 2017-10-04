@@ -1,6 +1,7 @@
 #include "vision_utils_ros/ros_fault_detection.h"
 
-ROSFaultDetection::ROSFaultDetection(ros::NodeHandle nh, int hessian) : current_(), last_(), cusum_(0.0), last_cusum_(0.0), is_First_Image_received(false),detector_(hessian),sensor_id_("NO_ID"), frame_id_("empty"){
+ROSFaultDetection::ROSFaultDetection(ros::NodeHandle nh, int hessian) : current_(), last_(), cusum_(0.0), last_cusum_(0.0), is_First_Image_received(false),
+                                                                        detector_(hessian),sensor_id_("NO_ID"), frame_id_("empty"), matcher_(0.10){
   ROS_INFO("ROSFaultDetection Constructor");
 
   //Subscribers
@@ -23,7 +24,8 @@ ROSFaultDetection::ROSFaultDetection(ros::NodeHandle nh, int hessian) : current_
 };
 
 void ROSFaultDetection::dyn_reconfigureCB(vision_utils_ros::dynamic_reconfigureConfig &config, uint32_t level){
-  ROS_INFO("Callback dynamic reconfigure");
+  detector_.hessianThreshold = config.hessian_threshold;
+  matcher_.setMatchPercentage(config.matching_threshold);
 }
 
 ROSFaultDetection::~ROSFaultDetection(){

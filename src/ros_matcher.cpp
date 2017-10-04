@@ -1,7 +1,7 @@
 #include "vision_utils_ros/ros_matcher.h"
 
-ROSMatcher::ROSMatcher(): frame_(), matchPercentage_(0.10){
-
+ROSMatcher::ROSMatcher(double threshold): frame_(), matchPercentage_(threshold){
+  matchPercentage_ = threshold;
 }
 
 ROSMatcher::~ROSMatcher(){
@@ -10,6 +10,10 @@ ROSMatcher::~ROSMatcher(){
 
 void ROSMatcher::setMatchPercentage(double val){
   matchPercentage_ = val;
+}
+
+double ROSMatcher::getMatchPercentage(){
+  return matchPercentage_;
 }
 
 void ROSMatcher::matchD(MyFrameContainer ext1, MyFrameContainer ext2){
@@ -48,7 +52,7 @@ void ROSMatcher::getBestMatches(MyFrameContainer ext1, MyFrameContainer ext2){
     Mat descriptors = ext1.getDescriptors();
 
     for( int i = 0; i < descriptors.rows; i++ ){
-      if ((k2[i].size > k1[i].size)&& (matches_[i].distance<0.10)){
+      if ((k2[i].size > k1[i].size)&& (matches_[i].distance< matchPercentage_)){
         best_matches_.push_back( matches_[i]);
 		}
 	}
