@@ -37,6 +37,8 @@ class ROSFaultDetection{
 		void run();
 		void publishOutputs();
 		void runFeatureExtractor();
+    void dyn_reconfigureCB(vision_utils_ros::dynamic_reconfigureConfig &config, uint32_t level);
+
 
 	private:
 		//Contains information from a given frame
@@ -67,9 +69,10 @@ class ROSFaultDetection{
 		std::string sensor_id_;
 		std::string frame_id_;
 
-
 		//dynamic_reconfigure
-		dynamic_reconfigure::Server<vision_utils_ros::dynamic_reconfigureConfig> server;
+		dynamic_reconfigure::Server<vision_utils_ros::dynamic_reconfigureConfig> dyn_server;
+    dynamic_reconfigure::Server<vision_utils_ros::dynamic_reconfigureConfig>::CallbackType dyn_server_cb;
+
 };
 
 #endif /* ROSFAULTDETECTION_H_ */
