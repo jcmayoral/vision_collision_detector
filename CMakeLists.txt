@@ -9,6 +9,7 @@ find_package(catkin REQUIRED
     cv_bridge
     fusion_msgs
     roscpp
+    dynamic_reconfigure
 )
 
 find_package(cmake_modules REQUIRED)
@@ -20,6 +21,10 @@ include_directories(
   ${OpenCV_INCLUDE_DIRS}
 )
 
+generate_dynamic_reconfigure_options(
+  cfg/fault_detection.cfg
+)
+
 catkin_package(
   INCLUDE_DIRS include/${PROJECT_NAME}
   LIBRARIES ${PROJECT_NAME}
@@ -27,6 +32,7 @@ catkin_package(
     geometry_msgs
     cv_bridge
     roscpp
+    dynamic_reconfigure
 )
 
 add_executable(vision_utils_ros
@@ -36,6 +42,8 @@ add_executable(vision_utils_ros
                src/ros_fault_detection.cpp
                src/ros_statics_tools.cpp
 )
+
+add_dependencies(vision_utils_ros ${PROJECT_NAME}_gencfg)
 
 target_link_libraries(${PROJECT_NAME}
   ${catkin_LIBRARIES}

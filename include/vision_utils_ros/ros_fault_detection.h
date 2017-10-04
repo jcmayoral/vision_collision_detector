@@ -5,6 +5,10 @@
 #include <std_msgs/Float64.h>
 #include <std_msgs/Float32.h>
 
+//dynamic_reconfigure
+#include <dynamic_reconfigure/server.h>
+#include <vision_utils_ros/dynamic_reconfigureConfig.h>
+
 //OpenCV
 #include "opencv2/core/core.hpp"
 #include "opencv2/features2d/features2d.hpp"
@@ -59,9 +63,13 @@ class ROSFaultDetection{
 
 		//Output
 		fusion_msgs::sensorFusionMsg output_msg_;
-		
+
 		std::string sensor_id_;
 		std::string frame_id_;
+
+
+		//dynamic_reconfigure
+		dynamic_reconfigure::Server<vision_utils_ros::dynamic_reconfigureConfig> server;
 };
 
 #endif /* ROSFAULTDETECTION_H_ */
