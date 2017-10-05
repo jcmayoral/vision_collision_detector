@@ -113,7 +113,7 @@ void ROSFaultDetection::publishOutputs(){
  output_msg_.data.push_back(cusum_);
  output_msg_.window_size = 1;
 
- if (fabs(cusum_-last_cusum_) > collisions_threshold_){
+ if (fabs(cusum_-last_cusum_) < collisions_threshold_){
    output_msg_.msg = fusion_msgs::sensorFusionMsg::OK;
  }
  else{
