@@ -1,7 +1,8 @@
 #include "vision_utils_ros/ros_fault_detection.h"
 
 ROSFaultDetection::ROSFaultDetection(ros::NodeHandle nh, int hessian) : current_(), last_(), cusum_(0.0), last_cusum_(0.0), is_First_Image_received(false),
-                                                                        detector_(hessian),sensor_id_("NO_ID"), frame_id_("empty"), matcher_(0.10){
+                                                                        detector_(hessian),sensor_id_("NO_ID"), frame_id_("empty"), matcher_(0.10),
+                                                                        collisions_threshold_(0.10){
   ROS_INFO("ROSFaultDetection Constructor");
 
   //Subscribers
@@ -26,6 +27,7 @@ ROSFaultDetection::ROSFaultDetection(ros::NodeHandle nh, int hessian) : current_
 void ROSFaultDetection::dyn_reconfigureCB(vision_utils_ros::dynamic_reconfigureConfig &config, uint32_t level){
   detector_.hessianThreshold = config.hessian_threshold;
   matcher_.setMatchPercentage(config.matching_threshold);
+  collisions_threshold_ = config.collisions_threshold;
 }
 
 ROSFaultDetection::~ROSFaultDetection(){
@@ -100,7 +102,7 @@ void ROSFaultDetection::publishOutputs(){
 
  //CUSUM Plot
  std_msgs::Float64 out_msg_2;
- out_msg_2.data = cusum_-last_cusum_;
+ out_msg_2.data = cusum_;
  cusum_pub_.publish(out_msg_2);
 
  //sensorFusionMsg
@@ -110,7 +112,14 @@ void ROSFaultDetection::publishOutputs(){
  output_msg_.data.clear();
  output_msg_.data.push_back(cusum_);
  output_msg_.window_size = 1;
- output_msg_.msg = fusion_msgs::sensorFusionMsg::OK;
+
+ if (fabs(cusum_-last_cusum_) > collisions_threshold_){
+   output_msg_.msg = fusion_msgs::sensorFusionMsg::OK;
+ }
+ else{
+   output_msg_.msg = fusion_msgs::sensorFusionMsg::ERROR;
+ }
+
  output_msg_pub_.publish(output_msg_);
 };
 

@@ -64,8 +64,10 @@ class ROSFaultDetection{
 		std::shared_ptr<ROSStatics> statics_tool;
 
 		//Output
+		double collisions_threshold_;
 		fusion_msgs::sensorFusionMsg output_msg_;
 
+		//Strings
 		std::string sensor_id_;
 		std::string frame_id_;
 
