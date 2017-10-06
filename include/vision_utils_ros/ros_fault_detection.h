@@ -61,6 +61,8 @@ class ROSFaultDetection{
 		//CUUSM
 		double cusum_;
 		double last_cusum_;
+		double last_cusum_mean_;
+		double last_cusum_var_;
 		std::shared_ptr<ROSStatics> statics_tool;
 
 		//Output
