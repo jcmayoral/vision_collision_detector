@@ -3,12 +3,12 @@
 #include "vision_utils_ros/ros_matcher.h"
 #include <math.h>
 
-#ifndef STATICS_TOOLS_H
-#define STATICS_TOOLS_H
-class ROSStatics{
+#ifndef STATISTICS_TOOLS_H
+#define STATISTICS_TOOLS_H
+class ROSStatistics{
   public:
-    ROSStatics();
-    ~ROSStatics();
+    ROSStatistics();
+    ~ROSStatistics();
     Point calculateMean(ROSMatcher match);
     Point calculateVariance(ROSMatcher match, Point mean);
     double CalculateCovariance(ROSMatcher match , double meanx, double meany);

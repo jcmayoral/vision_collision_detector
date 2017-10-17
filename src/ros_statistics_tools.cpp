@@ -1,16 +1,16 @@
-#include <vision_utils_ros/ros_statics_tools.h>
+#include <vision_utils_ros/ros_statistics_tools.h>
 #include<random>
 
 using namespace std;
 using namespace cv;
 
-ROSStatics::ROSStatics(){
+ROSStatistics::ROSStatistics(){
 }
 
-ROSStatics::~ROSStatics(){
+ROSStatistics::~ROSStatistics(){
 }
 
-Point ROSStatics::calculateMean(ROSMatcher match){
+Point ROSStatistics::calculateMean(ROSMatcher match){
 
     int number_points = match.getSize(2);
     std::vector<Point2f> v = match.getVector(2);
@@ -31,7 +31,7 @@ Point ROSStatics::calculateMean(ROSMatcher match){
     return tmp;
 }
 
-Point ROSStatics::calculateVariance(ROSMatcher match, Point mean){
+Point ROSStatistics::calculateVariance(ROSMatcher match, Point mean){
     int number_points = match.getSize(2);
     std::vector<Point2f> v = match.getVector(2);
     Point tmp;
@@ -55,7 +55,7 @@ Point ROSStatics::calculateVariance(ROSMatcher match, Point mean){
     return tmp;
 }
 
-double ROSStatics::CalculateCovariance(ROSMatcher match , double meanx, double meany){
+double ROSStatistics::CalculateCovariance(ROSMatcher match , double meanx, double meany){
 
     int number_points = match.getSize(2);
     std::vector<Point2f> v = match.getVector(2);
@@ -78,7 +78,7 @@ double ROSStatics::CalculateCovariance(ROSMatcher match , double meanx, double m
     return tmp;
 }
 
-double ROSStatics::CalculatePearsonCorrelation(ROSMatcher match , double meanx, double meany, double varx, double vary){
+double ROSStatistics::CalculatePearsonCorrelation(ROSMatcher match , double meanx, double meany, double varx, double vary){
 
     int number_points = match.getSize(2);
     std::vector<Point2f> v = match.getVector(2);
@@ -102,7 +102,7 @@ double ROSStatics::CalculatePearsonCorrelation(ROSMatcher match , double meanx, 
     return tmp;
 }
 
-double ROSStatics::CUSUM(ROSMatcher input, double & last_mean, double & last_variance){
+double ROSStatistics::CUSUM(ROSMatcher input, double & last_mean, double & last_variance){
 
   double cusum_mean, cusum_var, std_deviation, last_std_deviation, cusum = 0.0;
   std::vector<DMatch> v = input.getBestMatches();

@@ -15,7 +15,7 @@
 #include "opencv2/nonfree/features2d.hpp"
 #include <opencv2/imgproc/imgproc.hpp>
 //VisionUtils
-#include <vision_utils_ros/ros_statics_tools.h>
+#include <vision_utils_ros/ros_statistics_tools.h>
 //vision_utils_ros
 #include <vision_utils_ros/frame_container.h>
 #include <vision_utils_ros/ros_matcher.h>
@@ -63,7 +63,7 @@ class ROSFaultDetection{
 		double last_cusum_;
 		double last_cusum_mean_;
 		double last_cusum_var_;
-		std::shared_ptr<ROSStatics> statics_tool;
+		std::shared_ptr<ROSStatistics> statics_tool;
 
 		//Output
 		double collisions_threshold_;

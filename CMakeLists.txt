@@ -40,7 +40,7 @@ add_executable(vision_utils_ros
                src/frame_container.cpp
                src/ros_matcher.cpp
                src/ros_fault_detection.cpp
-               src/ros_statics_tools.cpp
+               src/ros_statistics_tools.cpp
 )
 
 add_dependencies(vision_utils_ros ${PROJECT_NAME}_gencfg)
