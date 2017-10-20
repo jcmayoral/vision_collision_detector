@@ -102,14 +102,22 @@ double ROSStatistics::CalculatePearsonCorrelation(ROSMatcher match , double mean
     return tmp;
 }
 
-double ROSStatistics::CUSUM(ROSMatcher input, double & last_mean, double & last_variance){
+double ROSStatistics::CUSUM(ROSMatcher input, double & last_mean, double & last_variance, double last_cusum){
 
-  double cusum_mean, cusum_var, std_deviation, last_std_deviation, cusum = 0.0;
+  double std_deviation, last_std_deviation = 0.0;
+  double cusum_mean = last_mean;
+  double cusum_var = last_variance;
+  double cusum = last_cusum;
+
   std::vector<DMatch> v = input.getBestMatches();
   double max_value = input.getMatchPercentage();
 
-  if (input.getSize(4)>1){
+  if (input.getSize(4)>2){
     //mean
+    cusum_mean = 0.0;
+    cusum_var = 0.0;
+    cusum = 0.0;
+
     for (unsigned int i=0; i<input.getSize(4);i++){
       cusum_mean += v[i].distance/max_value;
     }
@@ -120,16 +128,22 @@ double ROSStatistics::CUSUM(ROSMatcher input, double & last_mean, double & last_
       cusum_var += std::pow(v[i].distance - cusum_mean,2);
     }
     cusum_var = cusum_var/(input.getSize(4)-1);
+    ROS_INFO_STREAM("size" << input.getSize(4)-1);
+    ROS_INFO_STREAM("variance " << cusum_var);
 
     // BLANKE
     // s_z = (-np.power(z-m1,2) + np.power(z-m0,2))/(2*v1)
     std_deviation = sqrt(cusum_var);
+    ROS_INFO_STREAM("std_deviation " << std_deviation);
     last_std_deviation = sqrt(last_variance);
+    ROS_INFO_STREAM("last_std_deviation " << last_std_deviation);
 
     double constant = ((1/last_std_deviation) - (1/std_deviation))/2;
-    double prefix_constant = log(last_std_deviation/std_deviation);
+    ROS_INFO_STREAM("constant " << constant);
 
-    double cusum;
+    double prefix_constant = log(last_std_deviation/std_deviation);
+    ROS_INFO_STREAM("prefix_constant " << prefix_constant);
+
     for (unsigned int i=0; i<input.getSize(4);i++){
       cusum += prefix_constant + constant * pow((v[i].distance/max_value)-cusum_mean,2);
     }

@@ -35,7 +35,7 @@ catkin_package(
     dynamic_reconfigure
 )
 
-add_executable(vision_utils_ros
+add_executable(vision_utils_ros_node
                src/vision_utils_ros_node.cpp
                src/frame_container.cpp
                src/ros_matcher.cpp
@@ -43,9 +43,17 @@ add_executable(vision_utils_ros
                src/ros_statistics_tools.cpp
 )
 
-add_dependencies(vision_utils_ros ${PROJECT_NAME}_gencfg)
+add_library(${PROJECT_NAME}
+            src/vision_utils_ros_node.cpp
+            src/frame_container.cpp
+            src/ros_matcher.cpp
+            src/ros_fault_detection.cpp
+            src/ros_statistics_tools.cpp
+)
 
-target_link_libraries(${PROJECT_NAME}
+add_dependencies(vision_utils_ros_node ${PROJECT_NAME}_gencfg)
+
+target_link_libraries( vision_utils_ros_node
   ${catkin_LIBRARIES}
   ${OpenCV_LIBRARIES})
 
