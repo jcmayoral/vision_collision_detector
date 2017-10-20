@@ -1,7 +1,7 @@
 #include "vision_utils_ros/ros_fault_detection.h"
 
-ROSFaultDetection::ROSFaultDetection(ros::NodeHandle nh, int hessian) : current_(), last_(), cusum_(0.0), last_cusum_mean_(0.0),
-                                                                        last_cusum_var_(0.0), is_First_Image_received(false),
+ROSFaultDetection::ROSFaultDetection(ros::NodeHandle nh, int hessian) : current_(), last_(), last_cusum_(0.0), cusum_(0.0), last_cusum_mean_(0.0),
+                                                                        last_cusum_var_(1.0), is_First_Image_received(false),
                                                                         detector_(hessian),sensor_id_("NO_ID"), frame_id_("empty"), matcher_(0.10),
                                                                         collisions_threshold_(0.10){
   ROS_INFO("ROSFaultDetection Constructor");
@@ -12,7 +12,7 @@ ROSFaultDetection::ROSFaultDetection(ros::NodeHandle nh, int hessian) : current_
 
   //Standalone
   image_pub_ = nh.advertise<sensor_msgs::Image>("Image", 1);
-  cusum_pub_ = nh.advertise<std_msgs::Float64>("cusum_surf_distance", 1);
+  cusum_pub_ = nh.advertise<std_msgs::Float64>("cusum_diff", 1);
 
   ros::NodeHandle nh2("~");
   //Sensor Fusion
@@ -77,7 +77,7 @@ void ROSFaultDetection::run(){
    matcher_.getBestMatches(current_,last_);
    matcher_.separateBestMatches(current_,last_);
    matcher_.drawBestMatches(current_,last_);
-   cusum_ = statics_tool->CUSUM(matcher_, last_cusum_mean_, last_cusum_var_, cusum_);
+   cusum_ = statics_tool->CUSUM(matcher_, last_cusum_mean_, last_cusum_var_, last_cusum_);
    publishOutputs();
 };
 
@@ -102,7 +102,7 @@ void ROSFaultDetection::publishOutputs(){
 
  //CUSUM Plot
  std_msgs::Float64 out_msg_2;
- out_msg_2.data = cusum_;
+ out_msg_2.data = last_cusum_ - cusum_;
  cusum_pub_.publish(out_msg_2);
 
  //sensorFusionMsg
@@ -113,13 +113,13 @@ void ROSFaultDetection::publishOutputs(){
  output_msg_.data.push_back(cusum_);
  output_msg_.window_size = 1;
 
- if (fabs(cusum_-last_cusum_) > collisions_threshold_){
+ if ((last_cusum_- cusum_) > collisions_threshold_){
    output_msg_.msg = fusion_msgs::sensorFusionMsg::OK;
  }
  else{
    output_msg_.msg = fusion_msgs::sensorFusionMsg::ERROR;
  }
-
+ last_cusum_ += cusum_;
  output_msg_pub_.publish(output_msg_);
 };
 
