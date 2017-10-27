@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<package>
+  <name>vision_utils_ros</name>
+  <version>0.0.1</version>
+  <description>
+    The vision_utils ROS wrapper package
+  </description>
+
+  <maintainer email="jose.mayoral@smail.inf.h-brs.de">Jose Mayoral</maintainer>
+
+  <license>BSD</license>
+
+  <url type="website">TODO</url>
+
+  <author email="jose.mayoral@smail.inf.h-brs.de">Jose Mayoral</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>geometry_msgs</build_depend>
+  <build_depend>fusion_msgs</build_depend>
+  <build_depend>roscpp</build_depend>
+  <build_depend>cmake_modules</build_depend>
+  <build_depend>cv_bridge</build_depend>
+  <build_depend>dynamic_reconfigure</build_depend>
+
+  <run_depend>roscpp</run_depend>
+  <run_depend>geometry_msgs</run_depend>
+  <run_depend>fusion_msgs</run_depend>
+  <run_depend>cmake_modules</run_depend>
+  <run_depend>cv_bridge</run_depend>
+  <run_depend>dynamic_reconfigure</run_depend>
+
+
+  <export>
+  </export>
+</package>
