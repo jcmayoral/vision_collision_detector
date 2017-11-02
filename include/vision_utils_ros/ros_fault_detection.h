@@ -37,6 +37,7 @@ class ROSFaultDetection{
 		void run();
 		void publishOutputs();
 		void runFeatureExtractor();
+		double detectBlur();
     void dyn_reconfigureCB(vision_utils_ros::dynamic_reconfigureConfig &config, uint32_t level);
 
 

@@ -102,7 +102,7 @@ void ROSFaultDetection::publishOutputs(){
 
  //CUSUM Plot
  std_msgs::Float64 out_msg_2;
- out_msg_2.data = last_cusum_ - cusum_;
+ out_msg_2.data =  cusum_ - last_cusum_;
  cusum_pub_.publish(out_msg_2);
 
  //sensorFusionMsg
@@ -110,18 +110,32 @@ void ROSFaultDetection::publishOutputs(){
  output_msg_.header.frame_id = frame_id_;
  output_msg_.sensor_id.data = sensor_id_.c_str();
  output_msg_.data.clear();
- output_msg_.data.push_back(cusum_);
+
+ //double focusMeasure = detectBlur();
+ output_msg_.data.push_back(cusum_-last_cusum_);
+ //output_msg_.data.push_back(focusMeasure);
  output_msg_.window_size = 1;
 
- if ((last_cusum_- cusum_) > collisions_threshold_){
-   output_msg_.msg = fusion_msgs::sensorFusionMsg::OK;
- }
- else{
+ if ((cusum_- last_cusum_) > collisions_threshold_){
    output_msg_.msg = fusion_msgs::sensorFusionMsg::ERROR;
  }
- last_cusum_ += cusum_;
+ else{
+   output_msg_.msg = fusion_msgs::sensorFusionMsg::OK;
+ }
+ last_cusum_ = cusum_;
  output_msg_pub_.publish(output_msg_);
 };
+
+double ROSFaultDetection::detectBlur(){
+ cv::Mat lap;
+ cv::Laplacian(current_.getFrame(), lap, CV_64F);
+
+ cv::Scalar mu, sigma;
+ cv::meanStdDev(lap, mu, sigma);
+
+ double focusMeasure = sigma.val[0]*sigma.val[0];
+ return focusMeasure;
+}
 
 void ROSFaultDetection::runFeatureExtractor(){
 
