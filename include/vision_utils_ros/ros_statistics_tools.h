@@ -16,5 +16,6 @@ class ROSStatistics{
     double CalculateCovariance(ROSMatcher match , double meanx, double meany);
     double CalculatePearsonCorrelation(ROSMatcher match , double meanx, double meany, double varx, double vary);
     double CUSUM(ROSMatcher input, double & last_mean, double & last_variance, double last_cusum);
+    double getBlur(Mat currentFrame);
 };
 #endif // STATICS_TOOLS_H

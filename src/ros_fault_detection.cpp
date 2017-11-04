@@ -77,7 +77,8 @@ void ROSFaultDetection::run(){
    matcher_.getBestMatches(current_,last_);
    matcher_.separateBestMatches(current_,last_);
    matcher_.drawBestMatches(current_,last_);
-   cusum_ = statics_tool->CUSUM(matcher_, last_cusum_mean_, last_cusum_var_, last_cusum_);
+   //cusum_ = statics_tool->CUSUM(matcher_, last_cusum_mean_, last_cusum_var_, last_cusum_);
+   cusum_  = statics_tool->getBlur(current_.getFrame());
    publishOutputs();
 };
 
@@ -116,7 +117,7 @@ void ROSFaultDetection::publishOutputs(){
  //output_msg_.data.push_back(focusMeasure);
  output_msg_.window_size = 1;
 
- if ((cusum_- last_cusum_) > collisions_threshold_){
+ if (fabs(cusum_- last_cusum_) > collisions_threshold_){
    output_msg_.msg = fusion_msgs::sensorFusionMsg::ERROR;
  }
  else{

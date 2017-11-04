@@ -153,3 +153,14 @@ double ROSStatistics::CUSUM(ROSMatcher input, double & last_mean, double & last_
 
   return fabs(cusum);
 }
+
+double ROSStatistics::getBlur(Mat currentFrame){
+  cv::Mat lap;
+  cv::Laplacian(currentFrame, lap, CV_64F);
+
+  cv::Scalar mu, sigma;
+  cv::meanStdDev(lap, mu, sigma);
+
+  double focusMeasure = sigma.val[0]*sigma.val[0];
+  return focusMeasure;
+}
