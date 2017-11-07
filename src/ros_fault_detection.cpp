@@ -3,7 +3,7 @@
 ROSFaultDetection::ROSFaultDetection(ros::NodeHandle nh, int hessian) : current_(), last_(), last_cusum_(0.0), cusum_(0.0), last_cusum_mean_(0.0),
                                                                         last_cusum_var_(1.0), is_First_Image_received(false),
                                                                         detector_(hessian),sensor_id_("NO_ID"), frame_id_("empty"), matcher_(0.10),
-                                                                        collisions_threshold_(0.10){
+                                                                        collisions_threshold_(0.10), mode_(0){
   ROS_INFO("ROSFaultDetection Constructor");
 
   //Subscribers
@@ -29,6 +29,7 @@ void ROSFaultDetection::dyn_reconfigureCB(vision_utils_ros::dynamic_reconfigureC
   detector_.hessianThreshold = config.hessian_threshold;
   matcher_.setMatchPercentage(config.matching_threshold);
   collisions_threshold_ = config.collisions_threshold;
+  mode_ = config.mode;
 }
 
 ROSFaultDetection::~ROSFaultDetection(){
@@ -77,8 +78,13 @@ void ROSFaultDetection::run(){
    matcher_.getBestMatches(current_,last_);
    matcher_.separateBestMatches(current_,last_);
    matcher_.drawBestMatches(current_,last_);
-   //cusum_ = statics_tool->CUSUM(matcher_, last_cusum_mean_, last_cusum_var_, last_cusum_);
-   cusum_  = statics_tool->getBlur(current_.getFrame());
+
+   if (mode_ == 0){
+     cusum_ = statics_tool->CUSUM(matcher_, last_cusum_mean_, last_cusum_var_, last_cusum_);
+   }
+   else{
+     cusum_  = statics_tool->getBlur(current_.getFrame());
+   }
    publishOutputs();
 };
 
