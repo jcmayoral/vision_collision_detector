@@ -72,14 +72,14 @@ void ROSFaultDetection::imageCb(const sensor_msgs::ImageConstPtr& msg){
 };
 
 void ROSFaultDetection::run(){
-   matcher_.clearing();
-   matcher_.matchD(current_,last_);
-   matcher_.separateMatches(current_,last_);
-   matcher_.getBestMatches(current_,last_);
-   matcher_.separateBestMatches(current_,last_);
-   matcher_.drawBestMatches(current_,last_);
 
    if (mode_ == 0){
+     matcher_.clearing();
+     matcher_.matchD(current_,last_);
+     matcher_.separateMatches(current_,last_);
+     matcher_.getBestMatches(current_,last_);
+     matcher_.separateBestMatches(current_,last_);
+     matcher_.drawBestMatches(current_,last_);
      cusum_ = statics_tool->CUSUM(matcher_, last_cusum_mean_, last_cusum_var_, last_cusum_);
    }
    else{
@@ -91,12 +91,12 @@ void ROSFaultDetection::run(){
 void ROSFaultDetection::publishOutputs(){
 
  // Publishing image after matching
- Mat img = matcher_.getFrame();
+ Mat img = current_.getFrame();
  sensor_msgs::Image out_msg;
  cv_bridge::CvImage img_bridge;
  std_msgs::Header header;
 
- try{
+try{
    img_bridge = cv_bridge::CvImage(header, sensor_msgs::image_encodings::RGB8, img);
    img_bridge.toImageMsg(out_msg); // from cv_bridge to sensor_msgs::Image
    image_pub_.publish(out_msg);
