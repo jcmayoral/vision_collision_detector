@@ -3,7 +3,7 @@
 ROSFaultDetection::ROSFaultDetection(ros::NodeHandle nh, int hessian) : current_(), last_(), last_cusum_(0.0), cusum_(0.0), last_cusum_mean_(0.0),
                                                                         last_cusum_var_(1.0), is_First_Image_received(false),
                                                                         detector_(hessian),sensor_id_("NO_ID"), frame_id_("empty"), matcher_(0.10),
-                                                                        collisions_threshold_(0.10){
+                                                                        collisions_threshold_(0.10), mode_(0){
   ROS_INFO("ROSFaultDetection Constructor");
 
   //Subscribers
@@ -29,6 +29,7 @@ void ROSFaultDetection::dyn_reconfigureCB(vision_utils_ros::dynamic_reconfigureC
   detector_.hessianThreshold = config.hessian_threshold;
   matcher_.setMatchPercentage(config.matching_threshold);
   collisions_threshold_ = config.collisions_threshold;
+  mode_ = config.mode;
 }
 
 ROSFaultDetection::~ROSFaultDetection(){
@@ -71,25 +72,31 @@ void ROSFaultDetection::imageCb(const sensor_msgs::ImageConstPtr& msg){
 };
 
 void ROSFaultDetection::run(){
-   matcher_.clearing();
-   matcher_.matchD(current_,last_);
-   matcher_.separateMatches(current_,last_);
-   matcher_.getBestMatches(current_,last_);
-   matcher_.separateBestMatches(current_,last_);
-   matcher_.drawBestMatches(current_,last_);
-   cusum_ = statics_tool->CUSUM(matcher_, last_cusum_mean_, last_cusum_var_, last_cusum_);
+
+   if (mode_ == 0){
+     matcher_.clearing();
+     matcher_.matchD(current_,last_);
+     matcher_.separateMatches(current_,last_);
+     matcher_.getBestMatches(current_,last_);
+     matcher_.separateBestMatches(current_,last_);
+     matcher_.drawBestMatches(current_,last_);
+     cusum_ = statics_tool->CUSUM(matcher_, last_cusum_mean_, last_cusum_var_, last_cusum_);
+   }
+   else{
+     cusum_  = statics_tool->getBlur(current_.getFrame());
+   }
    publishOutputs();
 };
 
 void ROSFaultDetection::publishOutputs(){
 
  // Publishing image after matching
- Mat img = matcher_.getFrame();
+ Mat img = current_.getFrame();
  sensor_msgs::Image out_msg;
  cv_bridge::CvImage img_bridge;
  std_msgs::Header header;
 
- try{
+try{
    img_bridge = cv_bridge::CvImage(header, sensor_msgs::image_encodings::RGB8, img);
    img_bridge.toImageMsg(out_msg); // from cv_bridge to sensor_msgs::Image
    image_pub_.publish(out_msg);
@@ -116,7 +123,7 @@ void ROSFaultDetection::publishOutputs(){
  //output_msg_.data.push_back(focusMeasure);
  output_msg_.window_size = 1;
 
- if ((cusum_- last_cusum_) > collisions_threshold_){
+ if (fabs(cusum_- last_cusum_) > collisions_threshold_){
    output_msg_.msg = fusion_msgs::sensorFusionMsg::ERROR;
  }
  else{

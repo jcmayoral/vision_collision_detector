@@ -74,6 +74,9 @@ class ROSFaultDetection{
 		std::string sensor_id_;
 		std::string frame_id_;
 
+		//Mode Selector
+		int mode_;
+
 		//dynamic_reconfigure
 		dynamic_reconfigure::Server<vision_utils_ros::dynamic_reconfigureConfig> dyn_server;
     dynamic_reconfigure::Server<vision_utils_ros::dynamic_reconfigureConfig>::CallbackType dyn_server_cb;
