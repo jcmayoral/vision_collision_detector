@@ -3,7 +3,7 @@
 ROSFaultDetection::ROSFaultDetection(ros::NodeHandle nh, int hessian) : current_(), last_(), last_cusum_(0.0), cusum_(0.0), last_cusum_mean_(0.0),
                                                                         last_cusum_var_(1.0), is_First_Image_received(false),
                                                                         detector_(hessian),sensor_id_("NO_ID"), frame_id_("empty"), matcher_(0.10),
-                                                                        collisions_threshold_(0.10), mode_(0){
+                                                                        collisions_threshold_(0.10), mode_(0), weight_(1){
   ROS_INFO("ROSFaultDetection Constructor");
 
   //Subscribers
@@ -29,6 +29,7 @@ void ROSFaultDetection::dyn_reconfigureCB(vision_utils_ros::dynamic_reconfigureC
   detector_.hessianThreshold = config.hessian_threshold;
   matcher_.setMatchPercentage(config.matching_threshold);
   collisions_threshold_ = config.collisions_threshold;
+  weight_ = config.sensor_weight;
   mode_ = config.mode;
 }
 
@@ -122,6 +123,8 @@ try{
  output_msg_.data.push_back(cusum_-last_cusum_);
  //output_msg_.data.push_back(focusMeasure);
  output_msg_.window_size = 1;
+
+ output_msg_.weight = weight_;
 
  if (fabs(cusum_- last_cusum_) > collisions_threshold_){
    output_msg_.msg = fusion_msgs::sensorFusionMsg::ERROR;

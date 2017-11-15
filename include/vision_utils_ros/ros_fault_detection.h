@@ -77,6 +77,9 @@ class ROSFaultDetection{
 		//Mode Selector
 		int mode_;
 
+		//Weight
+		double weight_;
+
 		//dynamic_reconfigure
 		dynamic_reconfigure::Server<vision_utils_ros::dynamic_reconfigureConfig> dyn_server;
     dynamic_reconfigure::Server<vision_utils_ros::dynamic_reconfigureConfig>::CallbackType dyn_server_cb;
