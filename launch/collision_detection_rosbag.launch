@@ -8,6 +8,6 @@
   <node pkg="vision_utils_ros" type="vision_utils_ros_node" respawn="false" name="vision_utils_ros" output="screen">
     <remap from="~/camera" to="/camera/rgb/image_color"/>
     <param name="sensor_id" type="string" value="$(arg sensor_id)"/>
-    <param name="sensor_number" type="int" value="$(arg_sensor_number)"/>
+    <param name="sensor_number" type="int" value="$(arg sensor_number)"/>
   </node>
 </launch>
