@@ -19,8 +19,8 @@ ROSFaultDetection::ROSFaultDetection(ros::NodeHandle nh, int hessian) : current_
   ros::NodeHandle nh2("~");
   //Sensor Fusion
   int number = 0;
-  nh.getParam("sensor_id", number);
-  output_msg_pub_ = nh2.advertise<fusion_msgs::sensorFusionMsg>("/collisions_" + std::to_sting(number) , 1);
+  nh.getParam("sensor_number", number);
+  output_msg_pub_ = nh2.advertise<fusion_msgs::sensorFusionMsg>("/collisions_" + std::to_string(number) , 1);
 
   //dynamic_reconfigure
   dyn_server_cb = boost::bind(&ROSFaultDetection::dyn_reconfigureCB, this, _1, _2);
