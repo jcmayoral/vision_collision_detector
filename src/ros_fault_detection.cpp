@@ -2,10 +2,12 @@
 
 ROSFaultDetection::ROSFaultDetection(ros::NodeHandle nh, int hessian) : current_(), last_(), last_cusum_(0.0), cusum_(0.0), last_cusum_mean_(0.0),
                                                                         last_cusum_var_(1.0), is_First_Image_received(false),
-                                                                        detector_(hessian),sensor_id_("NO_ID"), frame_id_("empty"), matcher_(0.10),
+                                                                        sensor_id_("NO_ID"), frame_id_("empty"), matcher_(0.10),
                                                                         collisions_threshold_(0.10), mode_(0), weight_(1){
   ROS_INFO("ROSFaultDetection Constructor");
-
+  // Instancing detector_
+  fDetector_ = SURF::create();
+  fDetector_->setHessianThreshold(hessian);
   //Subscribers
   image_sub_ = nh.subscribe("camera", 1, &ROSFaultDetection::imageCb,this);
   ROS_INFO_STREAM("Camera topic " << image_sub_.getTopic());
@@ -26,7 +28,7 @@ ROSFaultDetection::ROSFaultDetection(ros::NodeHandle nh, int hessian) : current_
 };
 
 void ROSFaultDetection::dyn_reconfigureCB(vision_utils_ros::dynamic_reconfigureConfig &config, uint32_t level){
-  detector_.hessianThreshold = config.hessian_threshold;
+  fDetector_->setHessianThreshold(config.hessian_threshold);
   matcher_.setMatchPercentage(config.matching_threshold);
   collisions_threshold_ = config.collisions_threshold;
   weight_ = config.sensor_weight;
@@ -153,10 +155,8 @@ void ROSFaultDetection::runFeatureExtractor(){
  img = current_.getFrame();
  std::vector<cv::KeyPoint> k1;// = first_.getKeyPoints();
  Mat tmp;
-
- detector_.detect( img, k1 );
+ fDetector_->detectAndCompute(img,tmp, k1, descriptors);
  drawKeypoints(img,k1,tmp);
- extractor_.compute(img, k1, descriptors);
 
  if (descriptors.type()!=CV_32F) {
    descriptors.convertTo(descriptors, CV_32F);

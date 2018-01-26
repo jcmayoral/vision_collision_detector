@@ -68,7 +68,7 @@ void ROSMatcher::drawAllMatches(MyFrameContainer ext1, MyFrameContainer ext2){
 
 void ROSMatcher::show(std::string window_name){
   if (!frame_.empty()) {
-      imshow(window_name, frame_);
+      cv::imshow(window_name, frame_);
   }
 }
 

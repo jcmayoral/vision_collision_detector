@@ -12,8 +12,10 @@
 //OpenCV
 #include "opencv2/core/core.hpp"
 #include "opencv2/features2d/features2d.hpp"
-#include "opencv2/nonfree/features2d.hpp"
-#include <opencv2/imgproc/imgproc.hpp>
+#include "opencv2/features2d.hpp"
+#include "opencv2/xfeatures2d.hpp"
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgproc.hpp>
 //VisionUtils
 #include <vision_utils_ros/ros_statistics_tools.h>
 //vision_utils_ros
@@ -23,6 +25,7 @@
 #include <fusion_msgs/sensorFusionMsg.h>
 
 using namespace cv;
+using namespace cv::xfeatures2d;
 using namespace std;
 
 #ifndef ROSFAULTDETECTION_H_
@@ -46,8 +49,7 @@ class ROSFaultDetection{
 		MyFrameContainer current_;
 		MyFrameContainer last_;
 		//SURF Extraction
-		SurfFeatureDetector detector_;
-		SurfDescriptorExtractor extractor_;
+		Ptr<SURF> fDetector_;
 		ROSMatcher matcher_;
 
 		//Flags
@@ -78,11 +80,11 @@ class ROSFaultDetection{
 		int mode_;
 
 		//Weight
-		double weight_;
 
+		double weight_;
+		dynamic_reconfigure::Server<vision_utils_ros::dynamic_reconfigureConfig>::CallbackType dyn_server_cb;
 		//dynamic_reconfigure
 		dynamic_reconfigure::Server<vision_utils_ros::dynamic_reconfigureConfig> dyn_server;
-    dynamic_reconfigure::Server<vision_utils_ros::dynamic_reconfigureConfig>::CallbackType dyn_server_cb;
 
 };
 
