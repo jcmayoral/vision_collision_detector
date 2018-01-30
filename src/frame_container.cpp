@@ -27,6 +27,10 @@ Mat MyFrameContainer::getFrame(){
   return frame_;
 }
 
+void MyFrameContainer::clearFrame(){
+  frame_.release();
+}
+
 void MyFrameContainer::setDescriptors(Mat desc){
   descriptors_ = desc;
 }

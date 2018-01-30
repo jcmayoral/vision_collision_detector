@@ -27,12 +27,30 @@ ROSFaultDetection::ROSFaultDetection(ros::NodeHandle nh, int hessian) : current_
   ros::spin();
 };
 
+
+void ROSFaultDetection::reset(){
+
+  last_cusum_ = 0.0;
+  cusum_= 0,0;
+  last_cusum_mean_ = 0.0;
+  last_cusum_var_ = 1.0;
+  current_.clearFrame();
+  last_.clearFrame();
+  is_First_Image_received = false;
+
+}
+
 void ROSFaultDetection::dyn_reconfigureCB(vision_utils_ros::dynamic_reconfigureConfig &config, uint32_t level){
   detector_.hessianThreshold = config.hessian_threshold;
   matcher_.setMatchPercentage(config.matching_threshold);
   collisions_threshold_ = config.collisions_threshold;
   weight_ = config.sensor_weight;
   mode_ = config.mode;
+
+  if (config.reset){
+    reset();
+    config.reset = false;
+  }
 }
 
 ROSFaultDetection::~ROSFaultDetection(){
