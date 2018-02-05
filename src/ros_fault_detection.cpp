@@ -3,7 +3,7 @@
 ROSFaultDetection::ROSFaultDetection(ros::NodeHandle nh, int hessian) : current_(), last_(), last_cusum_(0.0), cusum_(0.0), last_cusum_mean_(0.0),
                                                                         last_cusum_var_(1.0), is_First_Image_received(false),
                                                                         detector_(hessian),sensor_id_("NO_ID"), frame_id_("empty"), matcher_(0.10),
-                                                                        collisions_threshold_(0.10), mode_(0), weight_(1){
+                                                                        collisions_threshold_(0.10), mode_(0), weight_(1), is_disabled_(false){
   ROS_INFO("ROSFaultDetection Constructor");
 
   //Subscribers
@@ -46,6 +46,7 @@ void ROSFaultDetection::dyn_reconfigureCB(vision_utils_ros::dynamic_reconfigureC
   collisions_threshold_ = config.collisions_threshold;
   weight_ = config.sensor_weight;
   mode_ = config.mode;
+  is_disabled_ = config.disable;
 
   if (config.reset){
     reset();
@@ -106,7 +107,10 @@ void ROSFaultDetection::run(){
    else{
      cusum_  = statics_tool->getBlur(current_.getFrame());
    }
-   publishOutputs();
+
+   if (!is_disabled_){
+     publishOutputs();
+   }
 };
 
 void ROSFaultDetection::publishOutputs(){

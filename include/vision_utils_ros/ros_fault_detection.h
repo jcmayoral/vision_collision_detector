@@ -53,7 +53,7 @@ class ROSFaultDetection{
 
 		//Flags
 		bool is_First_Image_received;
-
+		bool is_disabled_;
 		//Publishers and Subscriber
 		ros::Subscriber image_sub_;
 		ros::Publisher image_pub_;
