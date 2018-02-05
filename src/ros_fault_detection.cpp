@@ -49,7 +49,8 @@ void ROSFaultDetection::dyn_reconfigureCB(vision_utils_ros::dynamic_reconfigureC
   is_disabled_ = config.disable;
 
   output_msg_pub_.shutdown();
-  output_msg_pub_ = nh2.advertise<fusion_msgs::sensorFusionMsg>("/collisions_" + std::to_string(config.detector_id), 1);  
+  ros::NodeHandle nh2("~");
+  output_msg_pub_ = nh2.advertise<fusion_msgs::sensorFusionMsg>("/collisions_" + std::to_string(config.detector_id), 1);
 
   if (config.reset){
     reset();
