@@ -35,6 +35,7 @@ class MyFrameContainer{
 		Mat getDescriptors();
 		std::vector<cv::KeyPoint> getKeyPoints();
 		void setKeyPoints(std::vector<cv::KeyPoint> kp);
+		void clearFrame();
 
 	private:
 		Mat frame_;

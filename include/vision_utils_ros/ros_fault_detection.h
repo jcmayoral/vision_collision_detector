@@ -42,6 +42,7 @@ class ROSFaultDetection{
 		void runFeatureExtractor();
 		double detectBlur();
     void dyn_reconfigureCB(vision_utils_ros::dynamic_reconfigureConfig &config, uint32_t level);
+		void reset();
 
 
 	private:
@@ -54,7 +55,7 @@ class ROSFaultDetection{
 
 		//Flags
 		bool is_First_Image_received;
-
+		bool is_disabled_;
 		//Publishers and Subscriber
 		ros::Subscriber image_sub_;
 		ros::Publisher image_pub_;

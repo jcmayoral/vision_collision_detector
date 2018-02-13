@@ -2,8 +2,8 @@
 
 ROSFaultDetection::ROSFaultDetection(ros::NodeHandle nh, int hessian) : current_(), last_(), last_cusum_(0.0), cusum_(0.0), last_cusum_mean_(0.0),
                                                                         last_cusum_var_(1.0), is_First_Image_received(false),
-                                                                        sensor_id_("NO_ID"), frame_id_("empty"), matcher_(0.10),
-                                                                        collisions_threshold_(0.10), mode_(0), weight_(1){
+                                                                        detector_(hessian),sensor_id_("NO_ID"), frame_id_("empty"), matcher_(0.10),
+                                                                        collisions_threshold_(0.10), mode_(0), weight_(1), is_disabled_(false){
   ROS_INFO("ROSFaultDetection Constructor");
   // Instancing detector_
   fDetector_ = SURF::create();
@@ -18,9 +18,10 @@ ROSFaultDetection::ROSFaultDetection(ros::NodeHandle nh, int hessian) : current_
 
   ros::NodeHandle nh2("~");
   //Sensor Fusion
-  int number = 0;
+  int number = 1;
   nh.getParam("sensor_number", number);
-  output_msg_pub_ = nh2.advertise<fusion_msgs::sensorFusionMsg>("/collisions_" + std::to_string(number) , 1);
+  ROS_INFO_STREAM("Publishing to topic " << "/collisions_" + std::to_string(number));
+  output_msg_pub_ = nh2.advertise<fusion_msgs::sensorFusionMsg>("/collisions_" + std::to_string(number), 1);
 
   //dynamic_reconfigure
   dyn_server_cb = boost::bind(&ROSFaultDetection::dyn_reconfigureCB, this, _1, _2);
@@ -29,12 +30,35 @@ ROSFaultDetection::ROSFaultDetection(ros::NodeHandle nh, int hessian) : current_
   ros::spin();
 };
 
+
+void ROSFaultDetection::reset(){
+
+  last_cusum_ = 0.0;
+  cusum_= 0,0;
+  last_cusum_mean_ = 0.0;
+  last_cusum_var_ = 1.0;
+  current_.clearFrame();
+  last_.clearFrame();
+  is_First_Image_received = false;
+
+}
+
 void ROSFaultDetection::dyn_reconfigureCB(vision_utils_ros::dynamic_reconfigureConfig &config, uint32_t level){
   fDetector_->setHessianThreshold(config.hessian_threshold);
   matcher_.setMatchPercentage(config.matching_threshold);
   collisions_threshold_ = config.collisions_threshold;
   weight_ = config.sensor_weight;
   mode_ = config.mode;
+  is_disabled_ = config.disable;
+
+  output_msg_pub_.shutdown();
+  ros::NodeHandle nh2("~");
+  output_msg_pub_ = nh2.advertise<fusion_msgs::sensorFusionMsg>("/collisions_" + std::to_string(config.detector_id), 1);
+
+  if (config.reset){
+    reset();
+    config.reset = false;
+  }
 }
 
 ROSFaultDetection::~ROSFaultDetection(){
@@ -90,7 +114,10 @@ void ROSFaultDetection::run(){
    else{
      cusum_  = statics_tool->getBlur(current_.getFrame());
    }
-   publishOutputs();
+
+   if (!is_disabled_){
+     publishOutputs();
+   }
 };
 
 void ROSFaultDetection::publishOutputs(){
