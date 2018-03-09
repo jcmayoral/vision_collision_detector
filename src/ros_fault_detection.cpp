@@ -7,7 +7,7 @@ ROSFaultDetection::ROSFaultDetection(ros::NodeHandle nh, int hessian) : current_
   ROS_INFO("ROSFaultDetection Constructor");
 
   //Subscribers
-  image_sub_ = nh.subscribe("camera", 1, &ROSFaultDetection::imageCb,this);
+  image_sub_ = nh.subscribe("camera", 3, &ROSFaultDetection::imageCb,this);
   ROS_INFO_STREAM("Camera topic " << image_sub_.getTopic());
 
   //Standalone
@@ -138,7 +138,7 @@ try{
 
  //CUSUM Plot
  std_msgs::Float64 out_msg_2;
- out_msg_2.data =  cusum_ - last_cusum_;
+ out_msg_2.data =  cusum_;
  cusum_pub_.publish(out_msg_2);
 
  //sensorFusionMsg
@@ -154,7 +154,7 @@ try{
 
  output_msg_.weight = weight_;
 
- if (fabs(cusum_- last_cusum_) > collisions_threshold_){
+ if (fabs(cusum_- last_cusum_) >= collisions_threshold_){
    output_msg_.msg = fusion_msgs::sensorFusionMsg::ERROR;
  }
  else{

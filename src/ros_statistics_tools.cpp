@@ -145,9 +145,9 @@ double ROSStatistics::CUSUM(ROSMatcher input, double & last_mean, double & last_
 
     for (unsigned int i=0; i<input.getSize(4);i++){
       cusum += prefix_constant + constant * pow((v[i].distance/max_value)-cusum_mean,2);
-      last_mean = cusum_mean;
-      last_variance = cusum_var;
     }
+    last_mean = cusum_mean;
+    last_variance = cusum_var;
   }
 
 
