@@ -1,11 +1,4 @@
-/*
- * frame_container.cpp
- *
- *  Created on: Jul 27, 2017
- *      Author: jose
- */
-
-#include "vision_utils_ros/frame_container.h"
+#include "vision_collision_detector/frame_container.h"
 
 MyFrameContainer::MyFrameContainer(){
 }

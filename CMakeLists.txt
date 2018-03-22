@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(vision_utils_ros)
+project(vision_collision_detector)
 
 add_compile_options(-std=c++11)
 
@@ -35,8 +35,8 @@ catkin_package(
     dynamic_reconfigure
 )
 
-add_executable(vision_utils_ros_node
-               src/vision_utils_ros_node.cpp
+add_executable(vision_collision_detector_node
+               src/vision_collision_detector_node.cpp
                src/frame_container.cpp
                src/ros_matcher.cpp
                src/ros_fault_detection.cpp
@@ -44,16 +44,16 @@ add_executable(vision_utils_ros_node
 )
 
 add_library(${PROJECT_NAME}
-            src/vision_utils_ros_node.cpp
+            src/vision_collision_detector_node.cpp
             src/frame_container.cpp
             src/ros_matcher.cpp
             src/ros_fault_detection.cpp
             src/ros_statistics_tools.cpp
 )
 
-add_dependencies(vision_utils_ros_node ${PROJECT_NAME}_gencfg)
+add_dependencies(vision_collision_detector_node ${PROJECT_NAME}_gencfg)
 
-target_link_libraries( vision_utils_ros_node
+target_link_libraries( vision_collision_detector_node
   ${catkin_LIBRARIES}
   ${OpenCV_LIBRARIES})
 

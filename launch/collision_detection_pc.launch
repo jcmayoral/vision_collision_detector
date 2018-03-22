@@ -13,7 +13,7 @@
   </node>
 
 
-  <node pkg="vision_utils_ros" type="vision_utils_ros_node" respawn="false" name="vision_utils_ros_node" output="screen">
+  <node pkg="vision_collision_detector" type="vision_collision_detector_node" respawn="false" name="vision_utils_ros_node" output="screen">
     <remap from="~/camera" to="/$(arg sensor_id)/image_raw"/>
     <param name="sensor_id" type="string" value="$(arg sensor_id)"/>
     <param name="gui" type="bool" value="true"/>

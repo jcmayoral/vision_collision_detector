@@ -1,4 +1,4 @@
-#include "vision_utils_ros/ros_fault_detection.h"
+#include "vision_collision_detector/ros_fault_detection.h"
 
 ROSFaultDetection::ROSFaultDetection(ros::NodeHandle nh, int hessian) : current_(), last_(), last_cusum_(0.0), cusum_(0.0), last_cusum_mean_(0.0),
                                                                         last_cusum_var_(1.0), is_First_Image_received(false),

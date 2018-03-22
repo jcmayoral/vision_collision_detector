@@ -7,18 +7,17 @@
 
 //dynamic_reconfigure
 #include <dynamic_reconfigure/server.h>
-#include <vision_utils_ros/dynamic_reconfigureConfig.h>
+#include <vision_collision_detector/dynamic_reconfigureConfig.h>
 
 //OpenCV
 #include "opencv2/core/core.hpp"
 #include "opencv2/features2d/features2d.hpp"
 #include "opencv2/nonfree/features2d.hpp"
 #include <opencv2/imgproc/imgproc.hpp>
-//VisionUtils
-#include <vision_utils_ros/ros_statistics_tools.h>
-//vision_utils_ros
-#include <vision_utils_ros/frame_container.h>
-#include <vision_utils_ros/ros_matcher.h>
+//vision_collision_detector
+#include <vision_collision_detector/ros_statistics_tools.h>
+#include <vision_collision_detector/frame_container.h>
+#include <vision_collision_detector/ros_matcher.h>
 
 #include <fusion_msgs/sensorFusionMsg.h>
 
@@ -38,7 +37,7 @@ class ROSFaultDetection{
 		void publishOutputs();
 		void runFeatureExtractor();
 		double detectBlur();
-    void dyn_reconfigureCB(vision_utils_ros::dynamic_reconfigureConfig &config, uint32_t level);
+    void dyn_reconfigureCB(vision_collision_detector::dynamic_reconfigureConfig &config, uint32_t level);
 		void reset();
 
 
@@ -82,8 +81,8 @@ class ROSFaultDetection{
 		double weight_;
 
 		//dynamic_reconfigure
-		dynamic_reconfigure::Server<vision_utils_ros::dynamic_reconfigureConfig> dyn_server;
-    dynamic_reconfigure::Server<vision_utils_ros::dynamic_reconfigureConfig>::CallbackType dyn_server_cb;
+		dynamic_reconfigure::Server<vision_collision_detector::dynamic_reconfigureConfig> dyn_server;
+    dynamic_reconfigure::Server<vision_collision_detector::dynamic_reconfigureConfig>::CallbackType dyn_server_cb;
 
 };
 

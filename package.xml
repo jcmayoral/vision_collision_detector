@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <package>
-  <name>vision_utils_ros</name>
+  <name>vision_collision_detector</name>
   <version>0.0.1</version>
   <description>
-    The vision_utils ROS wrapper package
+    The vision_collision_detector ROS wrapper package
   </description>
 
   <maintainer email="jose.mayoral@smail.inf.h-brs.de">Jose Mayoral</maintainer>
