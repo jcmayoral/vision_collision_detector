@@ -40,7 +40,7 @@ void ROSFaultDetection::reset(){
 
 }
 
-void ROSFaultDetection::dyn_reconfigureCB(vision_utils_ros::dynamic_reconfigureConfig &config, uint32_t level){
+void ROSFaultDetection::dyn_reconfigureCB(vision_collision_detector::dynamic_reconfigureConfig &config, uint32_t level){
   detector_.hessianThreshold = config.hessian_threshold;
   matcher_.setMatchPercentage(config.matching_threshold);
   collisions_threshold_ = config.collisions_threshold;
