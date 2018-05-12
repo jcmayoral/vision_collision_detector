@@ -13,7 +13,7 @@ find_package(catkin REQUIRED
 )
 
 find_package(cmake_modules REQUIRED)
-find_package(OpenCV 2.4 REQUIRED)
+find_package(OpenCV 3.2 REQUIRED)
 
 include_directories(
   include

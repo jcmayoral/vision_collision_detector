@@ -12,7 +12,9 @@
 //OpenCV
 #include "opencv2/core/core.hpp"
 #include "opencv2/features2d/features2d.hpp"
-#include "opencv2/nonfree/features2d.hpp"
+#include "opencv2/features2d.hpp"
+#include "opencv2/xfeatures2d.hpp"
+
 #include <opencv2/imgproc/imgproc.hpp>
 //vision_collision_detector
 #include <vision_collision_detector/ros_statistics_tools.h>
@@ -23,6 +25,7 @@
 
 using namespace cv;
 using namespace std;
+using namespace cv::xfeatures2d;
 
 #ifndef ROSFAULTDETECTION_H_
 #define ROSFAULTDETECTION_H_
@@ -46,8 +49,7 @@ class ROSFaultDetection{
 		MyFrameContainer current_;
 		MyFrameContainer last_;
 		//SURF Extraction
-		SurfFeatureDetector detector_;
-		SurfDescriptorExtractor extractor_;
+		Ptr<SURF> detector_;
 		ROSMatcher matcher_;
 
 		//Flags
@@ -59,7 +61,7 @@ class ROSFaultDetection{
 		ros::Publisher cusum_pub_;
 		ros::Publisher output_msg_pub_;
 
-		//CUUSM
+		//CUUSM55
 		double cusum_;
 		double last_cusum_;
 		double last_cusum_mean_;
