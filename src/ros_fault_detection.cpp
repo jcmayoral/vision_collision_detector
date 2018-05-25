@@ -29,7 +29,11 @@ ROSFaultDetection::ROSFaultDetection(ros::NodeHandle nh, int hessian) : current_
   nh.getParam("sensor_id", sensor_id_);
   nh.getParam("sensor_number", number);
   ROS_INFO_STREAM("Publishing to topic " << "/collisions_" + std::to_string(number));
-  output_msg_pub_ = nh2.advertise<fusion_msgs::sensorFusionMsg>("/collisions_" + std::to_string(number), 1);
+
+  if (nh.getParam("sensor_number", number)){
+    output_msg_pub_.shutdown();
+    output_msg_pub_ = nh2.advertise<fusion_msgs::sensorFusionMsg>("/collisions_" + std::to_string(number), 1);
+  }
 
   ros::spin();
 };
